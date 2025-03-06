@@ -2,14 +2,8 @@
 
 import { useState } from 'react';
 
-export default function SignupPage() {
-    const [formData, setFormData] = useState({
-        fullname: "",
-        email: "",
-        password: "",
-        country: ""
-    });
-
+export async function LoginPage() {
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -21,45 +15,35 @@ export default function SignupPage() {
         e.preventDefault();
         setLoading(true);
         setMessage("");
-    
+
         try {
-            const res = await fetch("/api/users/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+            const res = await fetch("/api/users/login", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
+                credentials: 'include'
             });
     
             const data = await res.json();
     
             if (res.ok) {
-                setMessage("User created successfully!");
-                setFormData({ fullname: "", email: "", password: "", country: "" });
+                setMessage("Login Successful");
             } else {
-                setMessage(data.error || "Signup failed");
+                setMessage(data.error || 'Login failed');
             }
         } catch (error) {
-          setMessage("Something went wrong. Please try again.");
+            setMessage("Something went wrong, try again.");
         }
         setLoading(false);
     };
 
     return (
         <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-lg bg-white">
-            <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
-    
+            <h2 className="text-2xl font-bold mb-4">Login</h2>
+
             {message && <p className="mb-4 text-red-600">{message}</p>}
-        
+
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <input
-                    type="text"
-                    name="fullname"
-                    placeholder="Full Name"
-                    value={formData.fullname}
-                    onChange={handleChange}
-                    required
-                    className="p-2 border rounded"
-                />
-        
                 <input
                     type="email"
                     name="email"
@@ -69,7 +53,7 @@ export default function SignupPage() {
                     required
                     className="p-2 border rounded"
                 />
-        
+
                 <input
                     type="password"
                     name="password"
@@ -79,23 +63,13 @@ export default function SignupPage() {
                     required
                     className="p-2 border rounded"
                 />
-        
-                <input
-                    type="text"
-                    name="country"
-                    placeholder="Country"
-                    value={formData.country}
-                    onChange={handleChange}
-                    required
-                    className="p-2 border rounded"
-                />
-        
+
                 <button
                     type="submit"
                     className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                     disabled={loading}
                 >
-                    {loading ? "Signing up..." : "Sign Up"}
+                    {loading ? "Logging in..." : "Login"}
                 </button>
             </form>
         </div>
