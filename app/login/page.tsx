@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export async function LoginPage() {
+const LoginPage: React.FC = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
@@ -17,23 +17,25 @@ export async function LoginPage() {
         setMessage("");
 
         try {
-            const res = await fetch("/api/users/login", {
+            const response = await fetch("/api/users/login", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
                 credentials: 'include'
             });
     
-            const data = await res.json();
+            const data = await response.json();
     
-            if (res.ok) {
+            if (response.ok) {
                 setMessage("Login Successful");
             } else {
                 setMessage(data.error || 'Login failed');
             }
         } catch (error) {
             setMessage("Something went wrong, try again.");
+            console.error("Something went wrong", error);
         }
+        console.log(formData);
         setLoading(false);
     };
 
@@ -75,3 +77,5 @@ export async function LoginPage() {
         </div>
     );
 }
+
+export default LoginPage;
