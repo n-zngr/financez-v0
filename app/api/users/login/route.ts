@@ -1,16 +1,16 @@
-import { getCollection } from "@/app/utils/mongodb";
+import { getCollection, closeDatabaseConnection } from '@/app/utils/mongodb.util';
 import { NextResponse } from 'next/server';
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
     try {
-        const { email, password } = await req.json();
+        const { email, password } = await request.json();
         if (!email || !password) {
             return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
         }
 
-        const usersCollection = getCollection('users');
+        const usersCollection = await getCollection('users', 'users');
         const user = await usersCollection.findOne({ email });
         
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -21,10 +21,10 @@ export async function POST(req: Request) {
             { userId: user._id, email: user.email },
             process.env.JWT_SECRET!,
             { expiresIn: '7d' }
-        )
+        );
 
         // Detects if web-request from web (cookies) or mobile (JWT in response)
-        const isWeb = req.headers.get('user-agent')?.includes('Mozilla');
+        const isWeb = request.headers.get('user-agent')?.includes('Mozilla');
 
         const response = NextResponse.json({ message: "Login successful", token: isWeb ? undefined : token });
 
@@ -40,6 +40,8 @@ export async function POST(req: Request) {
         return response;
     } catch (error) {
         console.error('Login error: ', error);
-        return NextResponse.json({ erorr: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    } finally {
+        await closeDatabaseConnection();
     }
 }
