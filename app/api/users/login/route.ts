@@ -17,6 +17,14 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
         }
 
+        const response = NextResponse.json({ message: "Login successful" });
+
+        // CORS headers
+        response.headers.set('Access-Control-Allow-Origin', 'http://localhost:8081'); // Or use the origin from the request, or '*' during development.
+        response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        response.headers.set('Access-Control-Allow-Credentials', 'true');
+
         /* Temporarily remove tokens
         const token = jwt.sign(
             { userId: user._id, email: user.email },
@@ -36,14 +44,28 @@ export async function POST(request: Request) {
                 sameSite: 'lax',
                 path: '/'
             });
-        }
+        }*/
 
-        return response;*/
-        return NextResponse.json({ message: "Login successful" }); // Temporary new response
+        return response;
+        //return NextResponse.json({ message: "Login successful" }); // Temporary new response
     } catch (error) {
         console.error('Login error: ', error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     } finally {
         await closeDatabaseConnection();
     }
+}
+
+export async function OPTIONS(request: Request) {
+    const response = new NextResponse(null, {
+        status: 204,
+        headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:8081', // Or use the origin from the request, or '*' during development.
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Credentials': 'true',
+        },
+    });
+
+    return response;
 }
