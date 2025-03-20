@@ -17,6 +17,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
         }
 
+        /* Temporarily remove tokens
         const token = jwt.sign(
             { userId: user._id, email: user.email },
             process.env.JWT_SECRET!,
@@ -37,7 +38,8 @@ export async function POST(request: Request) {
             });
         }
 
-        return response;
+        return response;*/
+        return NextResponse.json({ message: "Login successful" }); // Temporary new response
     } catch (error) {
         console.error('Login error: ', error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
