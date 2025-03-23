@@ -33,13 +33,34 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
         }
         
-        const userId = result.insertedId;
+        const response = NextResponse.json({ message: "User created successfully" });
 
-        return NextResponse.json({ message: "User created successfully", userId: userId.toString() });
+        // CORS headers (used for development)
+        response.headers.set('Access-Control-Allow-Origin', 'http://localhost:8081');
+        response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        response.headers.set('Access-Control-Allow-Credentials', 'true');
+
+        return response;
     } catch (error) {
         console.error("Signup error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     } finally {
         await closeDatabaseConnection();
     }
+}
+
+export async function OPTIONS(request: Request) {
+    // CORS options (used for development)
+    const response = new NextResponse(null, {
+        status: 204,
+        headers: {
+            'Access-Control-Allow-Origin': 'http://localhost:8081',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Credentials': 'true',
+        },
+    });
+
+    return response;
 }
