@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     }
 }
 
-export async function OPTIONS(request: Request) {
+export async function OPTIONS() {
     // CORS options (used for development)
     const response = new NextResponse(null, {
         status: 204,
