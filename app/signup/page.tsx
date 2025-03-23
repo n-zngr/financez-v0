@@ -38,7 +38,8 @@ export default function SignupPage() {
                 setMessage(data.error || "Signup failed");
             }
         } catch (error) {
-          setMessage("Something went wrong. Please try again.");
+            console.error("Signup error:", error);
+            setMessage("Something went wrong. Please try again.");
         }
         setLoading(false);
     };
