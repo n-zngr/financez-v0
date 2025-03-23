@@ -23,7 +23,7 @@ export async function GET(request: Request) {
         const response = NextResponse.json(serializedTransactions);
 
         response.headers.set('Access-Control-Allow-Origin', 'http://localhost:8081');
-        response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
+        response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
         response.headers.set('Access-Control-Allow-Credentials', 'true');
 
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
 
         // CORS headers (used for development)
         response.headers.set('Access-Control-Allow-Origin', 'http://localhost:8081');
-        response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
         response.headers.set('Access-Control-Allow-Credentials', 'true');
 
@@ -105,7 +105,7 @@ export async function OPTIONS() {
         status: 204,
         headers: {
             'Access-Control-Allow-Origin': 'http://localhost:8081',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
             'Access-Control-Allow-Credentials': 'true',
         },
