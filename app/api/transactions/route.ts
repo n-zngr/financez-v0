@@ -2,6 +2,41 @@ import { getCollection, closeDatabaseConnection } from '@/app/utils/mongodb.util
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 
+export async function GET(request: Request) {
+    try {
+        const url = new URL(request.url);
+        const userId = url.searchParams.get('userId');
+
+        if (!userId) {
+            return NextResponse.json({ error: 'UserId is required' }, { status: 400 });
+        }
+
+        const transactionsCollection = await getCollection('transactions', 'transactions');
+        const transactions = await transactionsCollection.find({ userId: new ObjectId(userId)}).toArray();
+
+        const serializedTransactions = transactions.map(transaction => ({
+            ...transaction,
+            _id: transaction._id.toString(),
+            userId: transaction.userId.toString()
+        }));
+
+        const response = NextResponse.json(serializedTransactions);
+
+        response.headers.set('Access-Control-Allow-Origin', 'http://localhost:8081');
+        response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        response.headers.set('Access-Control-Allow-Credentials', 'true');
+
+        return response;
+
+    } catch (error) {
+        console.error('Get transactions error: ', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    } finally {
+        await closeDatabaseConnection()
+    }
+}
+
 export async function POST(request: Request) {
     try {
         /*const token = request.headers.get('authorization')?.split(' ')[1];
