@@ -1,4 +1,4 @@
-import { getCollection } from '@/app/utils/mongodb.util';
+/*import { getCollection } from '@/app/utils/mongodb.util';
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
@@ -36,4 +36,4 @@ export async function POST(request: Request) {
         console.error('Add transaction error: ', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
-}
+}*/
