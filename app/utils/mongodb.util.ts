@@ -9,7 +9,7 @@ if (!MONGODB_URI) {
 let cachedClient: MongoClient | null = null;
 let cachedDb: Db | null = null;
 
-async function connectToDatabase(databaseName: string): Promise<Db> {
+export async function connectToDatabase(databaseName: string): Promise<Db> {
     if (cachedClient && cachedDb && cachedDb.databaseName === databaseName) {
         return cachedDb;
     }
