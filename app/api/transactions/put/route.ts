@@ -2,13 +2,20 @@ import { getCollection, closeDatabaseConnection } from '@/app/utils/mongodb.util
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 
+interface UpdateData {
+    name?: string;
+    amount?: number;
+    type?: string;
+    receiptFileId?: ObjectId;
+}
+
 export async function PUT(request: Request) {
     const url = new URL(request.url);
     const transactionId = url.searchParams.get('transactionId') as string;
 
     try {
         const body = await request.json();
-        let updateData: any = {};
+        let updateData: UpdateData = {};
 
         if (body.name || body.amount || body.type) {
             updateData = {
