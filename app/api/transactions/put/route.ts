@@ -7,17 +7,30 @@ export async function PUT(request: Request) {
     const transactionId = url.searchParams.get('transactionId') as string;
 
     try {
-        const { userId, name, type, amount } = await request.json();
+        const body = await request.json();
+        let updateData: any = {};
 
-        if (!userId || !name || !type || !amount) {
-            return NextResponse.json({ error: 'Missing transaction userId, name, type, or amount' }, { status: 400 });
+        if (body.name || body.amount || body.type) {
+            updateData = {
+                name: body.name,
+                amount: parseFloat(body.amount),
+                type: body.type,
+            };
+        }
+
+        if (body.receiptFileId) {
+            updateData.receiptFileId = new ObjectId(body.receiptFileId);
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            return NextResponse.json({ message: "No changes requested" }, { status: 200 });
         }
 
         const transactionsCollection = await getCollection('transactions', 'transactions');
 
         const result = await transactionsCollection.updateOne(
             { _id: new ObjectId(transactionId) },
-            { $set: { name: name, amount: parseFloat(amount), type: type } }
+            { $set: updateData }
         );
 
         if (result.matchedCount === 0) {
