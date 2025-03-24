@@ -2,15 +2,10 @@ import { getCollection, closeDatabaseConnection } from '@/app/utils/mongodb.util
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 
-interface Params {
-    params: {
-        transactionId: string;
-    };
-}
+export async function PUT(request: Request, context: { params: { transactionId: string } }) {
+    const { transactionId } = await context.params;
 
-export async function PUT(request: Request, { params }: Params) {
     try {
-        const { transactionId } = await params;
         const { userId, name, type, amount } = await request.json();
 
         if (!userId || !name || !type || !amount) {
