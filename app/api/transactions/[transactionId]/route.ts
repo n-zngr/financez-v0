@@ -2,7 +2,13 @@ import { getCollection, closeDatabaseConnection } from '@/app/utils/mongodb.util
 import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 
-export async function PUT(request: Request, { params }: { params: { transactionId: string; } }) {
+interface Params {
+    params: {
+      transactionId: string;
+    };
+}
+
+export async function PUT(request: Request, { params }: Params) {
     try {
         const { transactionId } = params;
         const { userId, name, type, amount } = await request.json();
