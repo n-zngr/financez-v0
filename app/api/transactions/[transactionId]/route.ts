@@ -4,13 +4,13 @@ import { ObjectId } from 'mongodb';
 
 interface Params {
     params: {
-      transactionId: string;
+        transactionId: string;
     };
 }
 
 export async function PUT(request: Request, { params }: Params) {
     try {
-        const { transactionId } = params;
+        const { transactionId } = await params;
         const { userId, name, type, amount } = await request.json();
 
         if (!userId || !name || !type || !amount) {
