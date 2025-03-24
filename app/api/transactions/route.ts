@@ -39,22 +39,6 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        /*const token = request.headers.get('authorization')?.split(' ')[1];
-        if (!token) {
-            return NextResponse.json({ error: "Unauthorized: Missing token" }, { status: 401 });
-        }
-
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string, email: string };
-            const userId = decoded.userId;
-
-            if (!user) {
-                return NextResponse.json({ error: "Unauthorized: User invalid or could not be found" }, { status: 401 });
-            }
-
-        } catch (jwtError) {
-            return NextResponse.json({ error: "Unauthorized: Invalid token" }, { status: 401 });
-        }*/
 
         const { userId, name, type, amount } = await request.json();
 
