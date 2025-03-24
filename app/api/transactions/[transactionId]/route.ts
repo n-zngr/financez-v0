@@ -1,8 +1,8 @@
 import { getCollection, closeDatabaseConnection } from '@/app/utils/mongodb.util';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 
-export async function PUT(request: Request, context: { params: { transactionId: string } }) {
+export async function PUT(request: NextRequest, context: { params: { transactionId: string } }) {
     const { transactionId } = await context.params;
 
     try {
