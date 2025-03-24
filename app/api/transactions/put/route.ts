@@ -1,9 +1,10 @@
 import { getCollection, closeDatabaseConnection } from '@/app/utils/mongodb.util';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 
-export async function PUT(request: NextRequest, context: { params: { transactionId: string } }) {
-    const { transactionId } = await context.params;
+export async function PUT(request: Request) {
+    const url = new URL(request.url);
+    const transactionId = url.searchParams.get('transactionId') as string;
 
     try {
         const { userId, name, type, amount } = await request.json();
